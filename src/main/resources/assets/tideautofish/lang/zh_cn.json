@@ -1,0 +1,21 @@
+{
+  "key.categories.tideautofish": "潮汐自动钓鱼",
+  "key.tideautofish.toggle": "开关潮汐自动钓鱼",
+
+  "message.tideautofish.enabled": "潮汐自动钓鱼已开启",
+  "message.tideautofish.disabled": "潮汐自动钓鱼已关闭",
+  "message.tideautofish.tide_missing": "未找到潮汐（Tide）或版本不兼容，自动钓鱼已禁用。",
+  "message.tideautofish.vanilla_hook": "潮汐自动钓鱼需要潮汐的鱼钩。请在潮汐配置中开启 \"overrideVanillaRod\"（或使用潮汐鱼竿）。",
+  "message.tideautofish.low_durability": "潮汐自动钓鱼已停止：鱼竿即将损坏。",
+  "message.tideautofish.minigame_unsupported": "无法读取钓鱼小游戏状态，自动化已暂停。",
+
+  "hud.tideautofish.on": "潮汐自动钓鱼：开",
+  "hud.tideautofish.off": "潮汐自动钓鱼：关",
+  "hud.tideautofish.state.idle": "空闲",
+  "hud.tideautofish.state.casting": "抛竿中",
+  "hud.tideautofish.state.waiting": "等待咬钩",
+  "hud.tideautofish.state.bite": "咬钩！",
+  "hud.tideautofish.state.reeling": "收竿中",
+  "hud.tideautofish.state.minigame": "小游戏中",
+  "hud.tideautofish.state.cooldown": "冷却中"
+}

@@ -1,0 +1,21 @@
+{
+  "key.categories.tideautofish": "Tide Autofish",
+  "key.tideautofish.toggle": "Toggle Tide Autofish",
+
+  "message.tideautofish.enabled": "Tide Autofish enabled",
+  "message.tideautofish.disabled": "Tide Autofish disabled",
+  "message.tideautofish.tide_missing": "Tide was not found or is incompatible; Tide Autofish is disabled.",
+  "message.tideautofish.vanilla_hook": "Tide Autofish needs Tide's fishing hook. Enable \"overrideVanillaRod\" in Tide's config (or use a Tide fishing rod).",
+  "message.tideautofish.low_durability": "Tide Autofish stopped: the fishing rod is about to break.",
+  "message.tideautofish.minigame_unsupported": "Tide Autofish could not read the fishing minigame; automation paused.",
+
+  "hud.tideautofish.on": "Tide Autofish: ON",
+  "hud.tideautofish.off": "Tide Autofish: OFF",
+  "hud.tideautofish.state.idle": "idle",
+  "hud.tideautofish.state.casting": "casting",
+  "hud.tideautofish.state.waiting": "waiting for bite",
+  "hud.tideautofish.state.bite": "bite!",
+  "hud.tideautofish.state.reeling": "reeling",
+  "hud.tideautofish.state.minigame": "minigame",
+  "hud.tideautofish.state.cooldown": "cooldown"
+}
