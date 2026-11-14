@@ -255,7 +255,8 @@ IDLE ──有鱼竿──> CAST_CHARGING ──松开/立即抛──> WAIT_HOO
 
 要点：
 
-- **抛竿**：调用 `MultiPlayerGameMode.useItem(player, hand)`。如果 1 tick 后 `player.isUsingItem()` 为 true，说明 Tide 的 `holdToCast` 生效，等 `castHoldTicks` 后调用 `releaseUsingItem()`；否则说明 `holdToCast=false`，已经直接抛出。
+- **抛竿**：调用 `MultiPlayerGameMode.useItem(player, hand)`；随后保持 `castHoldTicks` 再发送 `releaseUsingItem()`。不再依赖 `player.isUsingItem()` 判断模式：即使界面打开导致客户端“使用中”状态被取消，服务端仍然会收到 release 包并完成抛竿；如果浮标已经出现，则直接进入 `WAITING`。
+- **前台界面**：除 Stardew 的 `FishingScreen` 外，任何 Screen 都不会暂停状态机；HUD 不绘制在 GUI 上，但抛竿、收竿、小游戏自动操作继续。该行为始终开启，没有配置开关。
 - **收竿**：同样调用 `useItem`，不直接调用 Tide 的 `retrieve`，这样服务端走正常的 `TideFishingRodItem.use` 路径。
 - **箱子/物品**：收竿后浮标立即消失，状态机自动进入 `RECAST_DELAY` 并重抛。
 - **小游戏失败**：Tide 原生小游戏超时后浮标会 `restartFishingSequence()` 留在水里，状态机回到 `WAITING`；星露谷失败会移除浮标，状态机重抛。

@@ -16,6 +16,7 @@
   - 星露谷钓鱼小游戏：用模型预测控制（MPC）模拟浮标未来 6 tick 的物理，自动按压/松开。
 - **自动重抛**：非鱼类战利品（箱子、物品）收上来后自动再次抛竿。
 - **鱼竿保护**：耐久低于阈值时自动停止。
+- **前台界面下继续工作**：打开背包、聊天、容器等界面时自动钓鱼不会暂停；该功能始终开启，没有关闭它的配置项。
 - **HUD / 按键 / 配置**：`V` 开关；左上角状态提示；`config/tideautofish-client.toml`。
 
 ## 环境要求
@@ -32,7 +33,7 @@
 ## 安装
 
 1. 安装 Forge 1.20.1。
-2. 把 `build/libs/tideautofish-1.0.0.jar` 放进 `mods/`。
+2. 把 `build/libs/tideautofish-1.1.0.jar` 放进 `mods/`。
 3. 确保 `[潮汐] tide-forge-1.20.1-2.1.jar` 也在 `mods/` 中。
 4. 可选：安装 `stardew_fishing-3.7-1.20.1.jar`，本模组会自动识别并接管它的小游戏。
 
@@ -83,7 +84,7 @@
 gradlew.bat build
 ```
 
-产物：`build/libs/tideautofish-1.0.0.jar`。
+产物：`build/libs/tideautofish-1.1.0.jar`。
 
 如果所在网络访问 `services.gradle.org` 较慢，可以修改 `gradle/wrapper/gradle-wrapper.properties` 的 `distributionUrl` 为镜像，例如腾讯云：
 
@@ -109,5 +110,6 @@ distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-8.1.1-bin.zip
 - 需要玩家自己面向水面；模组不会强制转动视角。
 - 不支持 `starcatcher` 的第三方小游戏（Tide 对其只做 fallback，`starcatcherStartMinigame` 返回 false 时会直接收竿，仍能自动重抛）。
 - 自动小游戏依赖 Tide 2.1 / Stardew Fishing 3.7 的私有字段名；如果它们大版本更新改了这些字段，对应的自动小游戏会安全禁用，但自动抛竿/收竿/重抛仍然可用。
+- 前台界面下继续工作指的是模组不会主动暂停：单人游戏的暂停菜单仍会暂停世界，容器界面下部分服务器也会拒绝使用物品，这两种情况下无法凭空产生咬钩或完成服务端交互。
 - 在多人服务器上使用自动钓鱼可能违反服务器规则；请自行确认。
 

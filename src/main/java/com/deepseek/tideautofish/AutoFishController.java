@@ -110,8 +110,8 @@ public final class AutoFishController {
 
         LocalPlayer player = minecraft.player;
 
-        // Stardew Fishing's minigame is a Screen. Drive it before the generic
-        // "a GUI is open, pause" logic below.
+        // Stardew Fishing's minigame is a Screen. Drive it before the normal
+        // state machine. Other screens do not pause automation.
         Screen screen = minecraft.screen;
         if (TideBridge.isStardewScreen(screen)) {
             handleStardewScreen(screen);
@@ -128,20 +128,8 @@ public final class AutoFishController {
             }
         }
 
-        if (screen != null) {
-            // Inventory, chat, pause menu, ...: freeze the state machine. If we
-            // were charging a cast, release the item so the player does not get
-            // stuck holding right-click.
-            if (state == State.CAST_CHARGING && player.isUsingItem() && minecraft.gameMode != null) {
-                minecraft.gameMode.releaseUsingItem(player);
-            }
-            if (state == State.CAST_CHARGING || state == State.CAST_RELEASING) {
-                state = State.IDLE;
-                ticks = 0;
-            }
-            return;
-        }
-
+        // Automation intentionally keeps running while any other screen (inventory,
+        // chat, container, ...) is open. This is always on and has no config toggle.
         if (player.isDeadOrDying() || player.isSpectator() || player.isSleeping()) {
             state = State.IDLE;
             ticks = 0;
@@ -192,21 +180,25 @@ public final class AutoFishController {
                 }
             }
             case CAST_CHARGING -> {
-                ticks++;
-                if (player.isUsingItem()) {
+                if (hook != null) {
+                    // holdToCast=false: the bobber already exists, stop waiting on
+                    // the (never started) item use.
+                    state = State.WAITING;
+                    ticks = 0;
+                } else {
+                    ticks++;
+                    // Always send the release after the configured hold time. This
+                    // also covers a screen opening and cancelling the client-side
+                    // "using item" state: the server still gets the release packet.
                     if (ticks >= Config.castHoldTicks()) {
                         minecraft.gameMode.releaseUsingItem(player);
                         state = State.CAST_RELEASING;
                         ticks = 0;
                     }
-                } else {
-                    // holdToCast is disabled: useItem cast the bobber immediately.
-                    state = State.WAIT_HOOK;
-                    ticks = 0;
-                }
-                if (ticks > 120) {
-                    state = State.RECAST_DELAY;
-                    ticks = 0;
+                    if (ticks > 120) {
+                        state = State.RECAST_DELAY;
+                        ticks = 0;
+                    }
                 }
             }
             case CAST_RELEASING -> {
@@ -380,12 +372,17 @@ public final class AutoFishController {
             return;
         }
 
-        // Minigame automation must keep working with the HUD hidden (F1).
-        if (enabled && minecraft.screen == null && Config.autoMinigame()) {
+        // Minigame automation must keep working with the HUD hidden (F1) and with
+        // screens such as the inventory or chat open.
+        if (enabled && Config.autoMinigame()) {
             TideBridge.autoClickTideMinigame();
         }
 
-        if (minecraft.options.hideGui || !Config.showHud() || (!enabled && !Config.hudWhenDisabled())) {
+        // Keep the status text out of GUIs; automation still runs above.
+        if (minecraft.screen != null
+                || minecraft.options.hideGui
+                || !Config.showHud()
+                || (!enabled && !Config.hudWhenDisabled())) {
             return;
         }
 
